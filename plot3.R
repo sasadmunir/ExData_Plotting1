@@ -1,0 +1,11 @@
+URI <- "exdata-data-household_power_consumption/household_power_consumption.txt"
+data <- read.table("exdata-data-household_power_consumption/household_power_consumption.txt",header=TRUE,sep=";",na.strings="?")
+data$Date1 <- as.Date(data$Date,"%d/%m/%Y")
+febData <- subset(data,(Date1 == "2007-02-01" | Date1 == "2007-02-02"))
+febData$datetime <- strptime(paste(febData$Date,febData$Time),"%d/%m/%Y %H:%M:%S")
+png("plot3.png")
+plot(febData$datetime,febData$Sub_metering_1,type="l",ylim=range(febData$Sub_metering_1,febData$Sub_metering_2,febData$Sub_metering_3),ylab="Energy Sub Metering",xlab="")
+lines(febData$datetime,febData$Sub_metering_2,col="orange")
+lines(febData$datetime,febData$Sub_metering_3,col="blue")
+legend("topright",col=c("black","orange","blue"),legend=c("Sub_metering_1","Sub_metering_2","Sub_metering_3"),lty=rep(1,3))
+dev.off()
